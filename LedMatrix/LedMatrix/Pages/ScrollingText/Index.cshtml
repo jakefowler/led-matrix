@@ -1,0 +1,13 @@
+﻿@page
+@model LedMatrix.Pages.ScrollingText.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Scrolling Text</h1>
+<form method="post">
+    <label>Enter text to scroll:</label>
+    <input asp-for="Text" />
+    <input type="submit" />
+</form>
+
