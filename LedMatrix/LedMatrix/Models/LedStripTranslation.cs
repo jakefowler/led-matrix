@@ -9,25 +9,12 @@ using System.Threading.Tasks;
 
 namespace LedMatrix.Models
 {
-    public class LedStripTranslation
+    public class LedStripTranslation : ILedStripTranslation
     {
         public int Height;
         public int Width;
         public BitmapImage Image;
         public Ws2812b Device;
-        public struct LedNode
-        {
-            public int X;
-            public int Y;
-            public Color Color;
-            public LedNode(int x, int y, Color color)
-            {
-                X = x;
-                Y = y;
-                Color = color;
-            }
-        }
-
         public LedStripTranslation(int height, int width)
         {
 

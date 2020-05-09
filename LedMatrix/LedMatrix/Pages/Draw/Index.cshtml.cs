@@ -14,10 +14,6 @@ namespace LedMatrix.Pages.Draw
         public int Width { get; } = 42;
         public void OnGet()
         {
-            //ledStripTranslation = new Models.LedStripTranslation(Height, Width);
         }
-
-        [HttpPost]
-        public ActionResult OnPostPixel() => new JsonResult(true);
     }
 }
