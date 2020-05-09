@@ -8,12 +8,12 @@ namespace LedMatrix.Models
 {
     public class ScrollingText
     {
-        public string DisplayText;
-        public int Height;
-        public int Width;
-        public Color PixelColor;
-        public Color[,] ColorGrid;
-        public LedStripTranslation Led;
+        public string DisplayText { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public Color PixelColor { get; set; }
+        public Color[,] ColorGrid { get; set; }
+        private readonly ILedStripTranslation _ledStripTranslation;
         public static Dictionary<char, string[]> Font = new Dictionary<char, string[]>() {
             {' ', new string[5] {"0000000", "0000000", "0000000", "0000000", "0000000" } },
             {'!', new string[5] {"0000000", "0000000", "1011111", "0000000", "0000000" } },
@@ -119,11 +119,14 @@ namespace LedMatrix.Models
             {'€', new string[5] {"0010100", "0111110", "1010101", "1000001", "0100010" } }
         };
 
-        public ScrollingText(string displayText, Color color, LedStripTranslation led, int loopIterations = 10)
+        public ScrollingText(ILedStripTranslation ledStripTranslation)
+        {
+            _ledStripTranslation = ledStripTranslation;
+        }
+        public bool ScrollText(string displayText, Color color, int loopIterations = 10)
         {
             PixelColor = color;
-            Led = led;
-            ColorGrid = new Color[Led.Height, Led.Width];
+            ColorGrid = new Color[_ledStripTranslation.Height, _ledStripTranslation.Width];
             DisplayText = displayText + "         ";
 
             // adding letters one column at a time
@@ -148,14 +151,15 @@ namespace LedMatrix.Models
                                 ColorGrid[i, ColorGrid.GetLength(1) - 1] = Color.Empty;
                             }
                         }
-                        Led.Image.Clear();
-                        Led.TwoDArrayToImage(ColorGrid);
-                        Led.Device.Update();
+                        _ledStripTranslation.Image.Clear();
+                        _ledStripTranslation.TwoDArrayToImage(ColorGrid);
+                        _ledStripTranslation.Device.Update();
                         System.Threading.Thread.Sleep(100);
                     }
                 }
                 loopIterations--;
             }
+            return true;
         }
 
         public void ShiftColorGrid()

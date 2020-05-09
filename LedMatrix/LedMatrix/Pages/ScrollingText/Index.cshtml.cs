@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using LedMatrix.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,8 +11,13 @@ namespace LedMatrix.Pages.ScrollingText
 {
     public class IndexModel : PageModel
     {
-        private Models.ScrollingText scrollingText;
-        private Models.LedStripTranslation ledStripTranslation;
+        private readonly ILedStripTranslation _ledStripTranslation;
+        public IndexModel(ILedStripTranslation ledStripTranslation)
+        {
+            _ledStripTranslation = ledStripTranslation;
+        }
+
+        private Models.ScrollingText _scrollingText;
         public int Height { get; } = 7;
         public int Width { get; } = 42;
         [BindProperty]
@@ -23,8 +29,8 @@ namespace LedMatrix.Pages.ScrollingText
 
         public void OnPost()
         {
-            ledStripTranslation = new Models.LedStripTranslation(Height, Width);
-            scrollingText = new Models.ScrollingText(Text, Color.FromArgb(67, 94, 82), ledStripTranslation, 1);
+            _scrollingText = new Models.ScrollingText(_ledStripTranslation);
+            _scrollingText.ScrollText(Text, Color.Green, 1);
         }
     }
 }

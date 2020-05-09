@@ -11,11 +11,11 @@ namespace LedMatrix.Models
 {
     public class LedStripTranslation : ILedStripTranslation
     {
-        public int Height;
-        public int Width;
-        public BitmapImage Image;
-        public Ws2812b Device;
-        public LedStripTranslation(int height, int width)
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public BitmapImage Image { get; set; }
+        public Ws2812b Device { get; set; }
+        public LedStripTranslation(int height = 7, int width = 42)
         {
 
             Height = height;
