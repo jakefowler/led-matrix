@@ -1,0 +1,35 @@
+﻿@page
+@model LedMatrix.Pages.Draw.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Draw</h1>
+
+<div>
+    <button class="btn-primary test">Test</button>
+
+</div>
+
+
+@section Scripts{
+
+<script>
+    $(document).ready(function () {
+        $('.test').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: 'api/Pixel',
+                //contentType = 'application/json; charset=utf-8',
+                //data: {
+                //    X: 0,
+                //    Y: 0,
+                //},
+            })
+            .done(function (result) {
+                console.log(result);
+            })
+        });
+    });
+</script>
+}
