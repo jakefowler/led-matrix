@@ -7,24 +7,26 @@
 <h1>Draw</h1>
 
 <div>
-    <button class="btn-primary test">Test</button>
-
+    <button class="btn-primary pixel">Pixel</button>
 </div>
-
 
 @section Scripts{
 
 <script>
     $(document).ready(function () {
-        $('.test').click(function () {
+        $('.pixel').click(function () {
             $.ajax({
-                type: 'POST',
-                url: 'api/Pixel',
-                //contentType = 'application/json; charset=utf-8',
-                //data: {
-                //    X: 0,
-                //    Y: 0,
-                //},
+                type: "POST",
+                url: "api/Pixel",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    X: 4,
+                    Y: 1,
+                    R: 255,
+                    G: 255,
+                    B: 0,
+                }),
+                dataType: "json",
             })
             .done(function (result) {
                 console.log(result);

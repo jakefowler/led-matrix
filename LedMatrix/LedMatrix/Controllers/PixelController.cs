@@ -13,17 +13,26 @@ namespace LedMatrix.Controllers
     [ApiController]
     public class PixelController : ControllerBase
     {
+        public class Pixel
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int R { get; set; }
+            public int G { get; set; }
+            public int B { get; set; }
+        }
         private readonly ILedStripTranslation _ledStripTranslation;
         public PixelController(ILedStripTranslation ledStripTranslation)
         {
             _ledStripTranslation = ledStripTranslation;
         }
         [HttpPost]
-        public ActionResult PostPixel(int x, int y)
+        public ActionResult Post(Pixel pixel)
         {
-            _ledStripTranslation.LedNodeToImage(new LedNode(x, y, Color.Green));
-            return new JsonResult(true);
+            LedNode ledNode = new LedNode(pixel.X, pixel.Y, pixel.R, pixel.G, pixel.B);
+            _ledStripTranslation.LedNodeToImage(ledNode);
+            _ledStripTranslation.Device.Update();
+            return new JsonResult(new { pixel.X, pixel.Y, pixel.R, pixel.G, pixel.B });
         }
-
     }
 }

@@ -17,5 +17,11 @@ namespace LedMatrix.Models
             Y = y;
             Color = color;
         }
+        public LedNode(int x, int y, int r, int g, int b)
+        {
+            X = x;
+            Y = y;
+            Color = Color.FromArgb(r, g, b);
+        }
     }
 }

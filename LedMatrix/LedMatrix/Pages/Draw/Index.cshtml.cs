@@ -9,7 +9,6 @@ namespace LedMatrix.Pages.Draw
 {
     public class IndexModel : PageModel
     {
-        //private Models.LedStripTranslation ledStripTranslation;
         public int Height { get; } = 7;
         public int Width { get; } = 42;
         public void OnGet()
