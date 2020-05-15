@@ -7,30 +7,64 @@
 <h1>Draw</h1>
 
 <div>
-    <button class="btn-primary pixel">Pixel</button>
+    @for (int i = Model.Height - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < Model.Width; j++)
+        {
+            <button class="btn-primary pixel" style="height:15px" data-x=@j data-y=@i></button>
+        }
+        <br />
+    }
 </div>
 
 @section Scripts{
 
 <script>
     $(document).ready(function () {
+        var mouseIsDown = false;
+        $(document).mousedown(function () {
+            mouseIsDown = true;
+        });
+        $(document).mouseup(function () {
+            mouseIsDown = false;
+        });
         $('.pixel').click(function () {
             $.ajax({
                 type: "POST",
                 url: "api/Pixel",
                 contentType: "application/json",
                 data: JSON.stringify({
-                    X: 4,
-                    Y: 1,
+                    X: $(this).data("x"),
+                    Y: $(this).data("y"),
                     R: 255,
-                    G: 255,
-                    B: 0,
+                    G: 0,
+                    B: 255,
                 }),
                 dataType: "json",
             })
             .done(function (result) {
                 console.log(result);
             })
+        });
+        $('.pixel').mouseover(function () {
+            if (mouseIsDown) {
+                $.ajax({
+                    type: "POST",
+                    url: "api/Pixel",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        X: $(this).data("x"),
+                        Y: $(this).data("y"),
+                        R: 255,
+                        G: 0,
+                        B: 255,
+                    }),
+                    dataType: "json",
+                })
+                .done(function (result) {
+                    console.log(result);
+                })
+            }
         });
     });
 </script>
