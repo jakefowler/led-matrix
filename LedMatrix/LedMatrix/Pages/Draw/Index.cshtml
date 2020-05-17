@@ -17,6 +17,9 @@
     }
 </div>
 
+<div>
+    <canvas id="canvas" height="@(Model.Height * 20)" width="@(Model.Width * 20)"></canvas>
+</div>
 @section Scripts{
 
 <script>
@@ -66,6 +69,22 @@
                 })
             }
         });
+
+        function drawGridLines() {
+            let canvas = document.getElementById("canvas");
+            let context = canvas.getContext("2d");
+            let width = $('#canvas').width();
+            let height = $('#canvas').height();
+
+            for (let i = 0; i < width; i += width / @Model.Width) {
+                context.moveTo(i, 0);
+                context.lineTo(i, height);
+            }
+            context.strokeStyle = "black";
+            context.stroke();
+
+        }
+        drawGridLines();
     });
 </script>
 }
