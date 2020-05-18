@@ -18,7 +18,7 @@
 </div>
 
 <div>
-    <canvas id="canvas" height="@(Model.Height * 20)" width="@(Model.Width * 20)"></canvas>
+    <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
 </div>
 @section Scripts{
 
@@ -76,9 +76,13 @@
             let width = $('#canvas').width();
             let height = $('#canvas').height();
 
-            for (let i = 0; i < width; i += width / @Model.Width) {
+            for (let i = 0; i <= width; i += width / @Model.Width) {
                 context.moveTo(i, 0);
                 context.lineTo(i, height);
+            }
+            for (let i = 0; i <= height; i += height / @Model.Height) {
+                context.moveTo(0, i);
+                context.lineTo(width, i);
             }
             context.strokeStyle = "black";
             context.stroke();
