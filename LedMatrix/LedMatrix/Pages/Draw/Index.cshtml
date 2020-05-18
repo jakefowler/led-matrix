@@ -20,11 +20,25 @@
 <div>
     <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
     <canvas id="rGPicker" height="@(255 * 2)" width="@(255 * 2)"></canvas>
+    <input type="range" min="0" max="255" value="127" id="blueSlider" />
 </div>
 @section Scripts{
 
 <script>
     const cellSize = 30;
+    const colorCellSize = 2;
+    let rGCanvas = document.getElementById("rGPicker");
+    let rGContext = rGCanvas.getContext("2d");
+    function fillColorPicker(e) {
+        let blue = $('#blueSlider').val();
+        for (let r = 0; r < 255; r++) {
+            for (let g = 0; g < 255; g++) {
+                rGContext.fillStyle = `rgb(${r},${g},${blue}`;
+                rGContext.fillRect(r * colorCellSize, g * colorCellSize, colorCellSize, colorCellSize);
+            }
+        }
+    }
+
     $(document).ready(function () {
         var mouseIsDown = false;
         $(document).mousedown(function () {
@@ -90,20 +104,10 @@
             context.stroke();
 
         }
-        let rGCanvas = document.getElementById("rGPicker");
-        let rGContext = rGCanvas.getContext("2d");
-        const colorCellSize = 2;
-        function fillColorPicker() {
-            for (let i = 0; i < 255; i++) {
-                for (let j = 0; j < 255; j++) {
-                    rGContext.fillStyle = `rgb(${i},${j},0)`;
-                    rGContext.fillRect(i * colorCellSize, j * colorCellSize, colorCellSize, colorCellSize);
-                }
-            }
-
-        }
         drawGridLines();
         fillColorPicker();
+
+        $('#blueSlider').on('input', fillColorPicker);
 
         $('#canvas').click(function (event) {
             console.log(event.offsetX);
