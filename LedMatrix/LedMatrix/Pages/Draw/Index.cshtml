@@ -20,13 +20,14 @@
 <div>
     <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
     <canvas id="colorPicker" height="@(255 * 2)" width="@(255 * 2)"></canvas>
-    <input type="range" min="0" max="255" value="127" id="blueSlider" />
+    <input type="range" min="0" max="255" value="127" id="blueSlider" step="1" />
     <div id="selectedColor"><br /><br /></div>
 
 </div>
 @section Scripts{
 
 <script>
+    let cellColor = "rgb(255, 0, 0)";
     const cellSize = 30;
     const colorCellSize = 2;
     let colorPickerCanvas = document.getElementById("colorPicker");
@@ -110,6 +111,7 @@
         fillColorPicker();
 
         $('#blueSlider').on('input', fillColorPicker);
+        $('#blueSlider').css('width', '100%')
 
         $('#canvas').click(function (event) {
             console.log(event.offsetX);
@@ -120,13 +122,14 @@
             console.log("X shift: " + xShift);
             console.log("Y shift: " + yShift);
 
-            context.fillStyle = "red";
+            context.fillStyle = cellColor;
             context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
         });
 
         $('#colorPicker').click(function (event) {
             let blue = $('#blueSlider').val();
-            $('#selectedColor').css('background-color', `rgb(${Math.floor(event.offsetX / colorCellSize)}, ${Math.floor(event.offsetY / colorCellSize)}, ${blue}`);
+            cellColor = `rgb(${Math.floor(event.offsetX / colorCellSize)}, ${Math.floor(event.offsetY / colorCellSize)}, ${blue}`
+            $('#selectedColor').css('background-color', cellColor);
         });
     });
 </script>
