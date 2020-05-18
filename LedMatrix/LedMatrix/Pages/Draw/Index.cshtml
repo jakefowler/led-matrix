@@ -19,6 +19,7 @@
 
 <div>
     <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
+    <canvas id="rGPicker" height="@(255 * 2)" width="@(255 * 2)"></canvas>
 </div>
 @section Scripts{
 
@@ -89,7 +90,20 @@
             context.stroke();
 
         }
+        let rGCanvas = document.getElementById("rGPicker");
+        let rGContext = rGCanvas.getContext("2d");
+        const colorCellSize = 2;
+        function fillColorPicker() {
+            for (let i = 0; i < 255; i++) {
+                for (let j = 0; j < 255; j++) {
+                    rGContext.fillStyle = `rgb(${i},${j},0)`;
+                    rGContext.fillRect(i * colorCellSize, j * colorCellSize, colorCellSize, colorCellSize);
+                }
+            }
+
+        }
         drawGridLines();
+        fillColorPicker();
 
         $('#canvas').click(function (event) {
             console.log(event.offsetX);
