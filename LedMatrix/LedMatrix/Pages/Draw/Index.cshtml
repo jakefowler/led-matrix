@@ -23,6 +23,7 @@
 @section Scripts{
 
 <script>
+    const cellSize = 30;
     $(document).ready(function () {
         var mouseIsDown = false;
         $(document).mousedown(function () {
@@ -70,9 +71,9 @@
             }
         });
 
+        let canvas = document.getElementById("canvas");
+        let context = canvas.getContext("2d");
         function drawGridLines() {
-            let canvas = document.getElementById("canvas");
-            let context = canvas.getContext("2d");
             let width = $('#canvas').width();
             let height = $('#canvas').height();
 
@@ -89,6 +90,19 @@
 
         }
         drawGridLines();
+
+        $('#canvas').click(function (event) {
+            console.log(event.offsetX);
+            console.log(event.offsetY);
+
+            let xShift = Math.floor(event.offsetX / cellSize);
+            let yShift = Math.floor(event.offsetY / cellSize);
+            console.log("X shift: " + xShift);
+            console.log("Y shift: " + yShift);
+
+            context.fillStyle = "red";
+            context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
+        });
     });
 </script>
 }
