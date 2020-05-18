@@ -7,14 +7,14 @@
 <h1>Draw</h1>
 
 <div>
-    @for (int i = Model.Height - 1; i >= 0; i--)
+    @*@for (int i = Model.Height - 1; i >= 0; i--)
     {
         for (int j = 0; j < Model.Width; j++)
         {
             <button class="btn-primary pixel" style="height:15px" data-x=@j data-y=@i></button>
         }
         <br />
-    }
+    }*@
 </div>
 
 <div>
@@ -43,7 +43,7 @@
     }
 
     $(document).ready(function () {
-        var mouseIsDown = false;
+        let mouseIsDown = false;
         $(document).mousedown(function () {
             mouseIsDown = true;
         });
@@ -113,17 +113,26 @@
         $('#blueSlider').on('input', fillColorPicker);
         $('#blueSlider').css('width', '100%')
 
-        $('#canvas').click(function (event) {
-            console.log(event.offsetX);
-            console.log(event.offsetY);
+        $('#canvas').mousedown(function (event) {
+            mouseIsDown = true;
+            fillCell(event);
+        });
 
-            let xShift = Math.floor(event.offsetX / cellSize);
-            let yShift = Math.floor(event.offsetY / cellSize);
-            console.log("X shift: " + xShift);
-            console.log("Y shift: " + yShift);
+        function fillCell(event) {
+            if (mouseIsDown) {
+                let xShift = Math.floor(event.offsetX / cellSize);
+                let yShift = Math.floor(event.offsetY / cellSize);
+                context.fillStyle = cellColor;
+                context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
+            }
+        }
 
-            context.fillStyle = cellColor;
-            context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
+        $('#canvas').mouseover(function (event) {
+            fillCell(event);
+        });
+
+        $('#canvas').mousemove(function (event) {
+            fillCell(event);
         });
 
         $('#colorPicker').click(function (event) {
