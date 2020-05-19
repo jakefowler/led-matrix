@@ -22,22 +22,23 @@
     <canvas id="colorPicker" height="@(255 * 2)" width="@(255 * 2)"></canvas>
     <input type="range" min="0" max="255" value="127" id="blueSlider" step="1" />
     <div id="selectedColor"><br /><br /></div>
-
 </div>
-@section Scripts{
 
+@section Scripts{
 <script>
     let cellColor = "rgb(255, 0, 0)";
     const cellSize = 30;
+
+    const scaleDown = 8;
     const colorCellSize = 2;
     let colorPickerCanvas = document.getElementById("colorPicker");
     let colorPickerContext = colorPickerCanvas.getContext("2d");
     function fillColorPicker(e) {
         let blue = $('#blueSlider').val();
-        for (let r = 0; r < 255; r++) {
-            for (let g = 0; g < 255; g++) {
+        for (let r = 0; r < 255; r+=scaleDown) {
+            for (let g = 0; g < 255; g+=scaleDown) {
                 colorPickerContext.fillStyle = `rgb(${r},${g},${blue}`;
-                colorPickerContext.fillRect(r * colorCellSize, g * colorCellSize, colorCellSize, colorCellSize);
+                colorPickerContext.fillRect(r * colorCellSize, g * colorCellSize, colorCellSize * scaleDown, colorCellSize * scaleDown);
             }
         }
     }
