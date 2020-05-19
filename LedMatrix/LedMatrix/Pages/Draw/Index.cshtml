@@ -18,7 +18,9 @@
 </div>
 
 <div>
-    <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
+    <div class="pre-scrollable">
+        <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
+    </div>
     <canvas id="colorPicker" height="@(255 * 2)" width="@(255 * 2)"></canvas>
     <input type="range" min="0" max="255" value="127" id="blueSlider" step="1" />
     <div id="selectedColor"><br /><br /></div>
