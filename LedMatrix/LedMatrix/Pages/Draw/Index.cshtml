@@ -7,17 +7,6 @@
 <h1>Draw</h1>
 
 <div>
-    @*@for (int i = Model.Height - 1; i >= 0; i--)
-    {
-        for (int j = 0; j < Model.Width; j++)
-        {
-            <button class="btn-primary pixel" style="height:15px" data-x=@j data-y=@i></button>
-        }
-        <br />
-    }*@
-</div>
-
-<div>
     <div class="pre-scrollable">
         <canvas id="canvas" height="@(Model.Height * 30)" width="@(Model.Width * 30)"></canvas>
     </div>
@@ -53,45 +42,6 @@
         $(document).mouseup(function () {
             mouseIsDown = false;
         });
-        $('.pixel').click(function () {
-            $.ajax({
-                type: "POST",
-                url: "api/Pixel",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    X: $(this).data("x"),
-                    Y: $(this).data("y"),
-                    R: 255,
-                    G: 0,
-                    B: 255,
-                }),
-                dataType: "json",
-            })
-            .done(function (result) {
-                console.log(result);
-            })
-        });
-        $('.pixel').mouseover(function () {
-            if (mouseIsDown) {
-                $.ajax({
-                    type: "POST",
-                    url: "api/Pixel",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        X: $(this).data("x"),
-                        Y: $(this).data("y"),
-                        R: 255,
-                        G: 0,
-                        B: 255,
-                    }),
-                    dataType: "json",
-                })
-                .done(function (result) {
-                    console.log(result);
-                })
-            }
-        });
-
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
         function drawGridLines() {
@@ -110,37 +60,54 @@
             context.stroke();
 
         }
-        drawGridLines();
-        fillColorPicker();
-
-        $('#blueSlider').on('input', fillColorPicker);
-        $('#blueSlider').css('width', '100%')
-
-        $('#canvas').mousedown(function (event) {
-            mouseIsDown = true;
-            fillCell(event);
-        });
-
         function fillCell(event) {
             if (mouseIsDown) {
                 let xShift = Math.floor(event.offsetX / cellSize);
                 let yShift = Math.floor(event.offsetY / cellSize);
                 context.fillStyle = cellColor;
-                context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
+                let clickedData = context.getImageData(xShift * cellSize, yShift * cellSize, 1, 1).data;
+                let clickedCellColor = `rgb(${clickedData[0]}, ${clickedData[1]}, ${clickedData[2]})`;
+                if (clickedCellColor !== cellColor) {
+                    console.log("different color");
+                    context.fillRect(xShift * cellSize, yShift * cellSize, cellSize, cellSize);
+                    let rgb = cellColor.match(/\d+/g);
+                    $.ajax({
+                        type: "POST",
+                        url: "api/Pixel",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            X: xShift,
+                            Y: Math.abs(yShift - @Model.Height + 1),
+                            R: parseInt(rgb[0]),
+                            G: parseInt(rgb[1]),
+                            B: parseInt(rgb[2]),
+                        }),
+                        dataType: "json",
+                    })
+                    .done(function (result) {
+                        console.log(result);
+                    });
+                }
             }
         }
+        drawGridLines();
+        fillColorPicker();
 
+        $('#blueSlider').on('input', fillColorPicker);
+        $('#blueSlider').css('width', '100%')
+        $('#canvas').mousedown(function (event) {
+            mouseIsDown = true;
+            fillCell(event);
+        });
         $('#canvas').mouseover(function (event) {
             fillCell(event);
         });
-
         $('#canvas').mousemove(function (event) {
             fillCell(event);
         });
-
         $('#colorPicker').click(function (event) {
             let blue = $('#blueSlider').val();
-            cellColor = `rgb(${Math.floor(event.offsetX / colorCellSize)}, ${Math.floor(event.offsetY / colorCellSize)}, ${blue}`
+            cellColor = `rgb(${Math.floor(event.offsetX / colorCellSize)}, ${Math.floor(event.offsetY / colorCellSize)}, ${blue})`
             $('#selectedColor').css('background-color', cellColor);
         });
     });
