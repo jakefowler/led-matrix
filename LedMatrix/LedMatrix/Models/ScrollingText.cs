@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LedMatrix.Models
 {
-    public class ScrollingText
+    public class ScrollingText : IScrollingText
     {
         public string DisplayText { get; set; }
         public int Height { get; set; }
@@ -125,6 +125,8 @@ namespace LedMatrix.Models
         }
         public bool ScrollText(string displayText, Color color, int loopIterations = 10)
         {
+            _ledStripTranslation.Image.Clear();
+            _ledStripTranslation.Device.Update();
             PixelColor = color;
             ColorGrid = new Color[_ledStripTranslation.Height, _ledStripTranslation.Width];
             DisplayText = displayText + "         ";

@@ -5,9 +5,31 @@
 }
 
 <h1>Scrolling Text</h1>
-<form method="post">
-    <label>Enter text to scroll:</label>
-    <input asp-for="Text" />
-    <input type="submit" />
-</form>
+<div class="input-group"> 
+    <label class="col-form-label mr-1">Enter text to scroll:</label>
+    <input id="textToScroll" />
+    <input type="button" value="Submit" id="submitButton" />
+</div>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+            $('#submitButton').click(function () {
+                let sendText = $('#textToScroll').val();
+                $.ajax({
+                    type: "POST",
+                    url: "api/ScrollText",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        Text: sendText,
+                    }),
+                    dataType: "json",
+                })
+                .done(function (result) {
+                    console.log(result);
+                });
+            });
+        });
+    </script>
+}
 
