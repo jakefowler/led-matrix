@@ -6,9 +6,15 @@
 
 <h1>Scrolling Text</h1>
 <div class="input-group"> 
-    <label class="col-form-label mr-1">Enter text to scroll:</label>
-    <input id="textToScroll" />
-    <input type="button" value="Submit" id="submitButton" />
+    <div class="row">
+        <label class="col-form-label mr-1">Enter text to scroll:</label>
+        <input class="input-group-text" id="textToScroll" />
+        <input class="btn" type="button" value="Submit" id="submitButton" />
+    </div>
+    <div class="row">
+        <label class="col-form-label mx-1">Number of times to scroll:</label>
+        <input class="input-group-text" id="iterations" type="number" value="1" min="1" />
+    </div>
 </div>
 
 @section Scripts{ 
@@ -22,6 +28,7 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         Text: sendText,
+                        Iterations: parseInt($('#iterations').val()),
                     }),
                     dataType: "json",
                 })

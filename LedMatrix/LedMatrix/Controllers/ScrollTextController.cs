@@ -16,6 +16,7 @@ namespace LedMatrix.Controllers
         public class ScrollText
         {
             public string Text { get; set; }
+            public int Iterations { get; set; }
         }
         private readonly IScrollingText _scrollingText;
         public ScrollTextController(IScrollingText scrollingText)
@@ -28,7 +29,7 @@ namespace LedMatrix.Controllers
         {
             _scrollingText.IsScrolling = false;
             System.Threading.Thread.Sleep(100);
-            _scrollingText.ScrollText(scrollText.Text, Color.BlueViolet, 1);
+            _scrollingText.ScrollText(scrollText.Text, Color.BlueViolet, scrollText.Iterations);
             return new JsonResult(scrollText.Text);
         }
     }
