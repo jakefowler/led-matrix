@@ -11,6 +11,7 @@ namespace LedMatrix.Models
         public string DisplayText { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+        public bool IsScrolling { get; set; }
         public Color PixelColor { get; set; }
         public Color[,] ColorGrid { get; set; }
         private readonly ILedStripTranslation _ledStripTranslation;
@@ -125,6 +126,7 @@ namespace LedMatrix.Models
         }
         public bool ScrollText(string displayText, Color color, int loopIterations = 10)
         {
+            IsScrolling = true;
             _ledStripTranslation.Image.Clear();
             _ledStripTranslation.Device.Update();
             PixelColor = color;
@@ -151,6 +153,10 @@ namespace LedMatrix.Models
                             else
                             {
                                 ColorGrid[i, ColorGrid.GetLength(1) - 1] = Color.Empty;
+                            }
+                            if (!IsScrolling)
+                            {
+                                return true;
                             }
                         }
                         _ledStripTranslation.Image.Clear();

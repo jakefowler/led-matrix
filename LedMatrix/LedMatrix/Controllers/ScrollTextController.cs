@@ -26,6 +26,8 @@ namespace LedMatrix.Controllers
         [HttpPost]
         public ActionResult Post(ScrollText scrollText)
         {
+            _scrollingText.IsScrolling = false;
+            System.Threading.Thread.Sleep(100);
             _scrollingText.ScrollText(scrollText.Text, Color.BlueViolet, 1);
             return new JsonResult(scrollText.Text);
         }

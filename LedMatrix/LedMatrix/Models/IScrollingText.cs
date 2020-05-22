@@ -9,6 +9,7 @@ namespace LedMatrix.Models
         int Height { get; set; }
         Color PixelColor { get; set; }
         int Width { get; set; }
+        bool IsScrolling { get; set; }
 
         bool ScrollText(string displayText, Color color, int loopIterations = 10);
         void ShiftColorGrid();
