@@ -3,16 +3,16 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Scrolling Text</h1>
-<div class="input-group"> 
+<h1 class="row">Scrolling Text</h1>
+<div class=""> 
     <div class="row">
-        <label class="col-form-label mr-1">Enter text to scroll:</label>
+        <label class="col-form-label mr-2">Enter text to scroll:</label>
         <input class="input-group-text" id="textToScroll" />
-        <input class="btn" type="button" value="Submit" id="submitButton" />
+        <input class="btn btn-light ml-2" type="button" value="Submit" id="submitButton" />
     </div>
+    <br />
     <div class="row">
-        <label class="col-form-label mx-1">Number of times to scroll:</label>
+        <label class="col-form-label mr-2">Number of times to scroll:</label>
         <input class="input-group-text" id="iterations" type="number" value="1" min="1" />
     </div>
 </div>
