@@ -146,6 +146,10 @@ namespace LedMatrix.Models
                         // add on new column
                         for (int i = 0; i < column.Length; i++)
                         {
+                            if (!IsScrolling)
+                            {
+                                return true;
+                            }
                             if (column[i].Equals('1'))
                             {
                                 ColorGrid[i, ColorGrid.GetLength(1) - 1] = PixelColor;
@@ -153,10 +157,6 @@ namespace LedMatrix.Models
                             else
                             {
                                 ColorGrid[i, ColorGrid.GetLength(1) - 1] = Color.Empty;
-                            }
-                            if (!IsScrolling)
-                            {
-                                return true;
                             }
                         }
                         _ledStripTranslation.Image.Clear();

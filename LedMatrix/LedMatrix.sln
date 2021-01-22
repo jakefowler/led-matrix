@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29920.165
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedMatrix", "LedMatrix\LedMatrix.csproj", "{AC1ABB46-CDF7-459F-A842-5E9432D849DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedMatrix", "LedMatrix\LedMatrix.csproj", "{0F89F9E0-FBEA-43D5-8E17-E7B88FBF90DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AC1ABB46-CDF7-459F-A842-5E9432D849DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC1ABB46-CDF7-459F-A842-5E9432D849DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC1ABB46-CDF7-459F-A842-5E9432D849DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC1ABB46-CDF7-459F-A842-5E9432D849DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F89F9E0-FBEA-43D5-8E17-E7B88FBF90DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F89F9E0-FBEA-43D5-8E17-E7B88FBF90DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F89F9E0-FBEA-43D5-8E17-E7B88FBF90DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F89F9E0-FBEA-43D5-8E17-E7B88FBF90DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {474381DD-CE1C-4E2D-A3BF-E29E5424528F}
+		SolutionGuid = {80455E54-C16B-4DF5-90CF-7C03A17AFBBD}
 	EndGlobalSection
 EndGlobal
