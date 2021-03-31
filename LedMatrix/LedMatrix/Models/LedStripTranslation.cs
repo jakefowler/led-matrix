@@ -53,10 +53,7 @@ namespace LedMatrix.Models
                     {
                         adjusted_col = col;
                     }
-                    if (colorGrid[row, col] != null)
-                    {
-                        Image.SetPixel(adjusted_col, row, colorGrid[row, col]);
-                    }
+                    Image.SetPixel(adjusted_col, row, colorGrid[row, col]);
                 }
             }
             return true;

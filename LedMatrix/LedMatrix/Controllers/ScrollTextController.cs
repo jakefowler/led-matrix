@@ -13,10 +13,14 @@ namespace LedMatrix.Controllers
     [ApiController]
     public class ScrollTextController : ControllerBase
     {
-        public class ScrollText
+        // class for passing in parameters through POST
+        public class PostText
         {
             public string Text { get; set; }
             public int Iterations { get; set; }
+            public int R { get; set; }
+            public int G { get; set; }
+            public int B { get; set; }
         }
         private readonly IScrollingText _scrollingText;
         public ScrollTextController(IScrollingText scrollingText)
@@ -25,12 +29,18 @@ namespace LedMatrix.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(ScrollText scrollText)
+        public ActionResult Post(PostText postText)
         {
-            _scrollingText.IsScrolling = false;
-            System.Threading.Thread.Sleep(100);
-            _scrollingText.ScrollText(scrollText.Text, Color.BlueViolet, scrollText.Iterations);
-            return new JsonResult(scrollText.Text);
+            TextToScroll text = new TextToScroll(postText.Text, postText.R, postText.G, postText.B, postText.Iterations);
+            if (_scrollingText.IsScrolling)
+            {
+                _scrollingText.AddText(text);
+            }
+            else
+            {
+                _scrollingText.ScrollText(text);
+            }
+            return new JsonResult(text.Text);
         }
     }
 }

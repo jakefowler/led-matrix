@@ -8,11 +8,11 @@ namespace LedMatrix.Models
 {
     public class ScrollingText : IScrollingText
     {
-        public string DisplayText { get; set; }
+        public Queue<TextToScroll> Texts { get; set; }
+        public TextToScroll CurrentText { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
         public bool IsScrolling { get; set; }
-        public Color PixelColor { get; set; }
         public Color[,] ColorGrid { get; set; }
         private readonly ILedStripTranslation _ledStripTranslation;
         public static Dictionary<char, string[]> Font = new Dictionary<char, string[]>() {
@@ -123,36 +123,49 @@ namespace LedMatrix.Models
         public ScrollingText(ILedStripTranslation ledStripTranslation)
         {
             _ledStripTranslation = ledStripTranslation;
+            Texts = new Queue<TextToScroll>();
         }
-        public bool ScrollText(string displayText, Color color, int loopIterations = 10)
+
+        public bool AddText(TextToScroll text)
         {
+            Texts.Enqueue(text);
+            return true;
+        }
+        public bool ScrollText(TextToScroll text)
+        {
+            if (Texts.Count > 0)
+            {
+                Texts.Enqueue(text);
+                CurrentText = Texts.Dequeue();
+                if (IsScrolling)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                CurrentText = text;
+            }
             IsScrolling = true;
             _ledStripTranslation.Image.Clear();
             _ledStripTranslation.Device.Update();
-            PixelColor = color;
             ColorGrid = new Color[_ledStripTranslation.Height, _ledStripTranslation.Width];
-            DisplayText = displayText + "         ";
 
             // adding letters one column at a time
-            string[] currentLetter;
-            while (loopIterations > 0)
+            while (CurrentText.ScrollIterations > 0)
             {
-                foreach (char c in DisplayText)
+                foreach (char c in CurrentText.Letters)
                 {
-                    currentLetter = Font[c];
+                    IEnumerable<string> currentLetter = Font[c];
                     foreach (string column in currentLetter)
                     {
                         ShiftColorGrid();
                         // add on new column
                         for (int i = 0; i < column.Length; i++)
                         {
-                            if (!IsScrolling)
-                            {
-                                return true;
-                            }
                             if (column[i].Equals('1'))
                             {
-                                ColorGrid[i, ColorGrid.GetLength(1) - 1] = PixelColor;
+                                ColorGrid[i, ColorGrid.GetLength(1) - 1] = CurrentText.Color;
                             }
                             else
                             {
@@ -165,8 +178,26 @@ namespace LedMatrix.Models
                         System.Threading.Thread.Sleep(100);
                     }
                 }
-                loopIterations--;
+                // shift to clear scrolling text
+                for (int i = 0; i < _ledStripTranslation.Width; i++)
+                {
+                    ShiftColorGrid();
+                    for (int j = 0; j < _ledStripTranslation.Height; j++)
+                    {
+                        ColorGrid[j, ColorGrid.GetLength(1) - 1] = Color.Empty;
+                    }
+                    _ledStripTranslation.Image.Clear();
+                    _ledStripTranslation.TwoDArrayToImage(ColorGrid);
+                    _ledStripTranslation.Device.Update();
+                    System.Threading.Thread.Sleep(100);
+                }
+                CurrentText.ScrollIterations--;
+                if (Texts.Count > 0)
+                {
+                    CurrentText = Texts.Dequeue();
+                }
             }
+            IsScrolling = false;
             return true;
         }
 
