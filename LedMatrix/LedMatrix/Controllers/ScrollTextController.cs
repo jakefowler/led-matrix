@@ -29,7 +29,7 @@ namespace LedMatrix.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(PostText postText)
+        public JsonResult Post(PostText postText)
         {
             TextToScroll text = new TextToScroll(postText.Text, postText.R, postText.G, postText.B, postText.Iterations);
             if (_scrollingText.IsScrolling)

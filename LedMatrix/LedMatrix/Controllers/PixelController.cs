@@ -27,7 +27,7 @@ namespace LedMatrix.Controllers
             _ledStripTranslation = ledStripTranslation;
         }
         [HttpPost]
-        public ActionResult Post(Pixel pixel)
+        public JsonResult Post(Pixel pixel)
         {
             LedNode ledNode = new LedNode(pixel.X, pixel.Y, pixel.R, pixel.G, pixel.B);
             _ledStripTranslation.LedNodeToImage(ledNode);
