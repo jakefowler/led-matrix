@@ -20,33 +20,39 @@ namespace LedMatrix.Controllers
         private readonly ILedStripTranslation _ledStripTranslation;
         public static readonly HttpClient Client = new HttpClient();
         private const string url = "http://localhost:8765";
+        private const int ankiApiVersion = 6;
         public AnkiController (ILedStripTranslation ledStripTranslation)
         {
             _ledStripTranslation = ledStripTranslation;
         }
-        public async Task<List<HabitDayReps>> RetrieveAnkiRepsPerDay()
+        public async Task<HttpResponseMessage> CallAnkiApi(string callAction)
         {
-            List<HabitDayReps> habitDayReps = new List<HabitDayReps>();
-            var call = new { action = "getNumCardsReviewedByDay", version = 6 };
+            var call = new { action = callAction, version = ankiApiVersion };
             var json = JsonSerializer.Serialize(call);
             var data = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            try
+            HttpResponseMessage responseMessage = await Client.PostAsync(url, data);
+            responseMessage.EnsureSuccessStatusCode();
+            return responseMessage;
+        }
+        public async Task<List<HabitDayReps>> GetAnkiRepsPerDay()
+        {
+            const string action = "getNumCardsReviewedByDay";
+            List<HabitDayReps> habitDayReps = new List<HabitDayReps>();
+            HttpResponseMessage response = await CallAnkiApi(action);
+            AnkiDateReps myDeserializedClass = JsonSerializer.Deserialize<AnkiDateReps>(response.Content.ReadAsStringAsync().Result);
+            foreach (var dateReps in myDeserializedClass.result)
             {
-                HttpResponseMessage response = await Client.PostAsync(url, data);
-                response.EnsureSuccessStatusCode();
-                AnkiDateReps myDeserializedClass = JsonSerializer.Deserialize<AnkiDateReps>(response.Content.ReadAsStringAsync().Result);
-                foreach (var dateReps in myDeserializedClass.result)
-                {
-                    DateTime dateTime = Convert.ToDateTime(dateReps[0].ToString());
-                    int reps = dateReps[1].GetInt32();
-                    habitDayReps.Add(new HabitDayReps(dateTime, reps));
-                }
-            }
-            catch(HttpRequestException e)
-            {
-                Console.WriteLine("Message :{0} ", e.Message);
+                DateTime dateTime = Convert.ToDateTime(dateReps[0].ToString());
+                int reps = dateReps[1].GetInt32();
+                habitDayReps.Add(new HabitDayReps(dateTime, reps));
             }
             return habitDayReps;
+        }
+        public async Task<bool> SyncAnkiCollection()
+        {
+            const string action = "sync";
+            HttpResponseMessage response = await CallAnkiApi(action);
+            return response.IsSuccessStatusCode;
         }
     }
 }
