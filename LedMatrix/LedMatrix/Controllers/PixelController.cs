@@ -30,7 +30,7 @@ namespace LedMatrix.Controllers
         public JsonResult Post(Pixel pixel)
         {
             LedNode ledNode = new LedNode(pixel.X, pixel.Y, pixel.R, pixel.G, pixel.B);
-            _ledStripTranslation.LedNodeToImage(ledNode);
+            _ledStripTranslation.ToImage(ledNode);
             _ledStripTranslation.Device.Update();
             return new JsonResult(new { pixel.X, pixel.Y, pixel.R, pixel.G, pixel.B });
         }

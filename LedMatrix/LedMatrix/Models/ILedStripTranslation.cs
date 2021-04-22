@@ -15,9 +15,9 @@ namespace LedMatrix.Models
         int Width { get; set; }
         BitmapImage Image { get; set; }
         Ws2812b Device { get; set; }
-        bool TwoDArrayToImage(Color[,] colorGrid);
-        bool LinkedListToImage(LinkedList<LedNode> ledNodes);
-        bool LedNodeToImage(LedNode ledNode);
+        bool ToImage(Color[,] colorGrid);
+        bool ToImage(IEnumerable<LedNode> ledNodes);
+        bool ToImage(LedNode ledNode);
         bool EraseLedNode(LedNode ledNode);
     }
 }

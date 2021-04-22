@@ -1,5 +1,6 @@
 ﻿using Iot.Device.Graphics;
 using Iot.Device.Ws28xx;
+using LedMatrix.Utility;
 using System;
 using System.Collections.Generic;
 using System.Device.Spi;
@@ -15,7 +16,7 @@ namespace LedMatrix.Models
         public int Width { get; set; }
         public BitmapImage Image { get; set; }
         public Ws2812b Device { get; set; }
-        public LedStripTranslation(int height = 7, int width = 42)
+        public LedStripTranslation(int height = Constants.LedHeight, int width = Constants.LedWidth)
         {
 
             Height = height;
@@ -35,7 +36,7 @@ namespace LedMatrix.Models
             Device.Update();
         }
 
-        public bool TwoDArrayToImage(Color[,] colorGrid)
+        public bool ToImage(Color[,] colorGrid)
         {
             int adjusted_col;
             int height = colorGrid.GetLength(0);
@@ -59,7 +60,7 @@ namespace LedMatrix.Models
             return true;
         }
 
-        public bool LinkedListToImage(LinkedList<LedNode> ledNodes)
+        public bool ToImage(IEnumerable<LedNode> ledNodes)
         {
             int adjusted_X;
             foreach (LedNode node in ledNodes)
@@ -84,7 +85,7 @@ namespace LedMatrix.Models
             return true;
         }
 
-        public bool LedNodeToImage(LedNode node)
+        public bool ToImage(LedNode node)
         {
             if (node.Y >= 0 && node.Y < Height && node.X >= 0 && node.X < Width)
             {

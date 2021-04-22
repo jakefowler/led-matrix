@@ -1,0 +1,25 @@
+﻿@page
+@model LedMatrix.Pages.Heatmap.IndexModel
+@{
+}
+
+<h1 class="row">Heatmap</h1>
+<input class="btn btn-light ml-2" type="button" value="Submit" id="submitButton" />
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            function refreshHeatmap () {
+                $.ajax({
+                    type: "GET",
+                    url: "api/Anki",
+                    contentType: "application/json",
+                })
+                .done(function (result) {
+                    console.log(result);
+                });
+            }
+            $('#submitButton').click(refreshHeatmap);
+    });
+    </script>
+}

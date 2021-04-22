@@ -173,7 +173,7 @@ namespace LedMatrix.Models
                             }
                         }
                         _ledStripTranslation.Image.Clear();
-                        _ledStripTranslation.TwoDArrayToImage(ColorGrid);
+                        _ledStripTranslation.ToImage(ColorGrid);
                         _ledStripTranslation.Device.Update();
                         System.Threading.Thread.Sleep(100);
                     }
@@ -187,7 +187,7 @@ namespace LedMatrix.Models
                         ColorGrid[j, ColorGrid.GetLength(1) - 1] = Color.Empty;
                     }
                     _ledStripTranslation.Image.Clear();
-                    _ledStripTranslation.TwoDArrayToImage(ColorGrid);
+                    _ledStripTranslation.ToImage(ColorGrid);
                     _ledStripTranslation.Device.Update();
                     System.Threading.Thread.Sleep(100);
                 }
