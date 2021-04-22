@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace LedMatrix.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AnkiController : Controller
     {
         class AnkiDateReps
@@ -34,17 +36,17 @@ namespace LedMatrix.Controllers
             responseMessage.EnsureSuccessStatusCode();
             return responseMessage;
         }
-        public async Task<List<HabitDayReps>> GetAnkiRepsPerDay()
+        public async Task<List<HabitDayRep>> GetAnkiRepsPerDay()
         {
             const string action = "getNumCardsReviewedByDay";
-            List<HabitDayReps> habitDayReps = new List<HabitDayReps>();
+            List<HabitDayRep> habitDayReps = new List<HabitDayRep>();
             HttpResponseMessage response = await CallAnkiApi(action);
             AnkiDateReps myDeserializedClass = JsonSerializer.Deserialize<AnkiDateReps>(response.Content.ReadAsStringAsync().Result);
             foreach (var dateReps in myDeserializedClass.result)
             {
                 DateTime dateTime = Convert.ToDateTime(dateReps[0].ToString());
                 int reps = dateReps[1].GetInt32();
-                habitDayReps.Add(new HabitDayReps(dateTime, reps));
+                habitDayReps.Add(new HabitDayRep(dateTime, reps));
             }
             return habitDayReps;
         }
@@ -53,6 +55,12 @@ namespace LedMatrix.Controllers
             const string action = "sync";
             HttpResponseMessage response = await CallAnkiApi(action);
             return response.IsSuccessStatusCode;
+        }
+        [HttpGet]
+        public async Task<JsonResult> Heatmap()
+        {
+            await SyncAnkiCollection();
+            return new JsonResult(await GetAnkiRepsPerDay());
         }
     }
 }

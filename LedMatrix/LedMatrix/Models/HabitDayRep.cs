@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace LedMatrix.Models
 {
-    public class HabitDayReps
+    public class HabitDayRep
     {
         public DateTime Date { get; set; }
         public int Repititions { get; set; }
 
-        public HabitDayReps(DateTime date, int repititions)
+        public HabitDayRep(DateTime date, int repititions)
         {
             Date = date;
             Repititions = repititions;
