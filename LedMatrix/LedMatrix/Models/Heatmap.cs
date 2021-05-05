@@ -16,6 +16,7 @@ namespace LedMatrix.Models
         public int MinRep = 1;
         // rgb with a max of 255 for the green and red and blue with the remainder to make the green lighter in color
         public int MaxColorValue = 450;
+        public int MinColorValue = 50;
         private readonly ILedStripTranslation _ledStripTranslation; 
         public Heatmap(ILedStripTranslation ledStripTranslation, IEnumerable<HabitDayRep> habitDayReps)
         {
@@ -41,6 +42,11 @@ namespace LedMatrix.Models
         public Color CalculateColor(int reps)
         {
             return Color.Red;
+        }
+
+        public int NormalizeToMinMaxColor(int reps)
+        {
+            return (MaxColorValue - MinColorValue) * ((reps - MinRep) / (MaxRep - MinRep)) + MinColorValue;
         }
     }
 }
