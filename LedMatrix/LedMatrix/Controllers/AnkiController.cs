@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -19,6 +21,7 @@ namespace LedMatrix.Controllers
             public object error { get; set; }
         }
 
+        private readonly string ankiDataFilePath = "~"; 
         private readonly ILedStripTranslation _ledStripTranslation;
         public static readonly HttpClient Client = new HttpClient();
         private const string url = "http://localhost:8765";
@@ -61,6 +64,29 @@ namespace LedMatrix.Controllers
         {
             await SyncAnkiCollection();
             return new JsonResult(await GetAnkiRepsPerDay());
+        }
+        public async Task<List<HabitDayRep>> ReadAnkiData()
+        {
+            List<HabitDayRep> habitDayReps = new List<HabitDayRep>();
+            string jsonString = await System.IO.File.ReadAllTextAsync(ankiDataFilePath);
+            AnkiDateReps myDeserializedClass = JsonSerializer.Deserialize<AnkiDateReps>(jsonString);
+            foreach (var dateReps in myDeserializedClass.result)
+            {
+                DateTime dateTime = Convert.ToDateTime(dateReps[0].ToString());
+                int reps = dateReps[1].GetInt32();
+                habitDayReps.Add(new HabitDayRep(dateTime, reps));
+            }
+            return habitDayReps;
+        }
+        public async Task<bool> StoreAnkiData(List<HabitDayRep> habitDayReps)
+        {
+            if (System.IO.File.Exists(ankiDataFilePath))
+            {
+                System.IO.File.Delete(ankiDataFilePath);
+            }
+            using FileStream filestream = System.IO.File.Create(ankiDataFilePath);
+            await JsonSerializer.SerializeAsync(filestream, habitDayReps);
+            return true;
         }
     }
 }
