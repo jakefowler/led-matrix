@@ -41,7 +41,18 @@ namespace LedMatrix.Models
 
         public Color CalculateColor(int reps)
         {
-            return Color.Red;
+            int colorRepValue = MaxColorValue + MinColorValue - NormalizeToMinMaxColor(reps);
+            int r = 0;
+            int g = 0;
+            int b = 0;
+            if (colorRepValue > 255)
+            {
+                r = colorRepValue - 255;
+                g = 255;
+                b = colorRepValue - 255;
+                return Color.FromArgb(r, g, b);
+            }
+            return Color.FromArgb(r, colorRepValue, b);
         }
 
         public int NormalizeToMinMaxColor(int reps)
