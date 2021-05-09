@@ -21,7 +21,7 @@ namespace LedMatrix.Controllers
             public object error { get; set; }
         }
 
-        private readonly string ankiDataFilePath = "~"; 
+        private readonly string ankiDataFilePath = "~";
         private readonly ILedStripTranslation _ledStripTranslation;
         public static readonly HttpClient Client = new HttpClient();
         private const string url = "http://localhost:8765";
@@ -60,10 +60,16 @@ namespace LedMatrix.Controllers
             return response.IsSuccessStatusCode;
         }
         [HttpGet]
-        public async Task<JsonResult> Heatmap()
+        public async Task<JsonResult> RefreshHeatmapFromApi()
         {
             await SyncAnkiCollection();
             return new JsonResult(await GetAnkiRepsPerDay());
+        }
+        public async Task<JsonResult> RefreshHeatmapFromFile()
+        {
+            List<HabitDayRep> habitDayReps = await ReadAnkiData();
+            new Heatmap(_ledStripTranslation, habitDayReps);
+            return new JsonResult(habitDayReps);
         }
         public async Task<List<HabitDayRep>> ReadAnkiData()
         {
