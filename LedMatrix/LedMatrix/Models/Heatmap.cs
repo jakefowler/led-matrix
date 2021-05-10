@@ -31,14 +31,14 @@ namespace LedMatrix.Models
                        where habitDayRep.Date.Year == StartOfYear.Year
                        select new LedNode
                        (
-                           (habitDayRep.Date.DayOfYear + dayOfWeekOffset) / 7,
-                           (habitDayRep.Date.DayOfYear % 7) + dayOfWeekOffset,
+                           (habitDayRep.Date.DayOfYear + dayOfWeekOffset - 1) / 7,
+                           (habitDayRep.Date.DayOfYear + dayOfWeekOffset - 1) % 7,
                            CalculateColor(habitDayRep.Repititions)
                        );
             _ledStripTranslation.Image.Clear();
             _ledStripTranslation.ToImage(LedNodes);
+            _ledStripTranslation.Device.Update();
         }
-
         public Color CalculateColor(int reps)
         {
             int colorRepValue = MaxColorValue + MinColorValue - NormalizeToMinMaxColor(reps);
@@ -54,7 +54,6 @@ namespace LedMatrix.Models
             }
             return Color.FromArgb(r, colorRepValue, b);
         }
-
         public int NormalizeToMinMaxColor(int reps)
         {
             return (MaxColorValue - MinColorValue) * ((reps - MinRep) / (MaxRep - MinRep)) + MinColorValue;

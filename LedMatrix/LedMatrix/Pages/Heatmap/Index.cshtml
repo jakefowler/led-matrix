@@ -4,7 +4,7 @@
 }
 
 <h1 class="row">Heatmap</h1>
-<input class="btn btn-light ml-2" type="button" value="Submit" id="submitButton" />
+<input class="btn btn-light ml-2" type="button" value="Refresh Heatmap" id="submitButton" />
 
 @section Scripts{
     <script>
@@ -12,7 +12,7 @@
             function refreshHeatmap () {
                 $.ajax({
                     type: "GET",
-                    url: "api/Anki",
+                    url: '@Url.Action("RefreshHeatmap", "Anki")',
                     contentType: "application/json",
                 })
                 .done(function (result) {
