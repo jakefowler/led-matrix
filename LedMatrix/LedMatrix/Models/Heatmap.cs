@@ -34,14 +34,22 @@ namespace LedMatrix.Models
                        where habitDayRep.Date.Year == StartOfYear.Year
                        select new LedNode
                        (
-                           ((habitDayRep.Date.DayOfYear + dayOfWeekOffset - 1) / 7),
-                           Math.Abs(((habitDayRep.Date.DayOfYear + dayOfWeekOffset - 1) % 7) - 6),
+                           CalculateXFromDayOfYear(habitDayRep.Date.DayOfYear, dayOfWeekOffset),
+                           CalculateYFromDayOfYear(habitDayRep.Date.DayOfYear, dayOfWeekOffset),
                            CalculateColor(habitDayRep.Repititions)
                        );
             _ledStripTranslation.Image.Clear();
             _ledStripTranslation.ToImage(LedNodes);
             _ledStripTranslation.Device.Update();
             return true;
+        }
+        private int CalculateXFromDayOfYear(int dayOfYear, int dayOfWeekOffset)
+        {
+            return ((dayOfYear + dayOfWeekOffset - 1) / 7);
+        }
+        private int CalculateYFromDayOfYear(int dayOfYear, int dayOfWeekOffset)
+        {
+            return Math.Abs(((dayOfYear + dayOfWeekOffset - 1) % 7) - 6);
         }
         public Color CalculateColor(int reps)
         {
