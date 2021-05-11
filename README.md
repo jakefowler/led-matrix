@@ -2,6 +2,8 @@
 
 Scrolling text inputted from the ASP.NET Core website hosted on the Raspberry Pi.
 ![Led Matrix Demonstration](media/led-matrix-demo.gif)
+Heatmap of how many Anki flashcard reviews I have done per day.
+![Anki Heatmap](media/heatmap.jpg)
 ### Parts
 [5 volt 12 amp power supply](https://www.amazon.com/gp/product/B074YHN8D1/)
 ![Power Supply Front](media/power-supply-front.jpg)
