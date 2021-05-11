@@ -21,8 +21,8 @@ namespace LedMatrix.Controllers
             public object error { get; set; }
         }
 
-        private readonly string ankiDataFilePath = "anki-data.json";
         private readonly ILedStripTranslation _ledStripTranslation;
+        private readonly string ankiDataFilePath = "anki-data.json";
         public static readonly HttpClient Client = new HttpClient();
         private const string url = "http://localhost:8765";
         private const int ankiApiVersion = 6;
@@ -30,7 +30,7 @@ namespace LedMatrix.Controllers
         {
             _ledStripTranslation = ledStripTranslation;
         }
-        public async Task<HttpResponseMessage> CallAnkiApi(string callAction)
+        private async Task<HttpResponseMessage> CallAnkiApi(string callAction)
         {
             var call = new { action = callAction, version = ankiApiVersion };
             var json = JsonSerializer.Serialize(call);
@@ -39,7 +39,7 @@ namespace LedMatrix.Controllers
             responseMessage.EnsureSuccessStatusCode();
             return responseMessage;
         }
-        public async Task<List<HabitDayRep>> GetAnkiRepsPerDay()
+        private async Task<List<HabitDayRep>> GetAnkiRepsPerDay()
         {
             const string action = "getNumCardsReviewedByDay";
             List<HabitDayRep> habitDayReps = new List<HabitDayRep>();
@@ -68,10 +68,11 @@ namespace LedMatrix.Controllers
         public async Task<JsonResult> RefreshHeatmap()
         {
             List<HabitDayRep> habitDayReps = await ReadAnkiData();
-            new Heatmap(_ledStripTranslation, habitDayReps);
+            Heatmap heatmap = new Heatmap(_ledStripTranslation);
+            heatmap.UpdateHeatmap(habitDayReps);
             return new JsonResult(habitDayReps);
         }
-        public async Task<List<HabitDayRep>> ReadAnkiData()
+        private async Task<List<HabitDayRep>> ReadAnkiData()
         {
             List<HabitDayRep> habitDayReps = new List<HabitDayRep>();
             string jsonString = await System.IO.File.ReadAllTextAsync(ankiDataFilePath);
@@ -84,7 +85,7 @@ namespace LedMatrix.Controllers
             }
             return habitDayReps;
         }
-        public async Task<bool> StoreAnkiData(List<HabitDayRep> habitDayReps)
+        private async Task<bool> StoreAnkiData(List<HabitDayRep> habitDayReps)
         {
             if (System.IO.File.Exists(ankiDataFilePath))
             {
